@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>things-random-grid test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../things-random-grid.html">
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <things-random-grid></things-random-grid>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('things-random-grid', function() {
+        test('instantiating the element works', function() {
+          var element = fixture('basic');
+          assert.equal(element.is, 'things-random-grid');
+        });
+      });
+    </script>
+  </body>
+</html>

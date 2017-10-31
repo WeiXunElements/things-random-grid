@@ -1,0 +1,418 @@
+<!--
+@license
+Copyright © HatioLab Inc. All rights reserved.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../things-grid/things-resource-grid.html">
+<link rel="import" href="../things-global-behavior/things-global-behavior.html">
+<link rel="import" href="../things-msg-box-behavior/things-msg-box-behavior.html">
+<!--
+# `<things-random-grid>`
+## 1. 개요
+#### 개발의 필요에 의하여 필요한 데이터를 그리드 설저하지 않고 내용 그대로 표현하면 되는 경우 해당 컴포넌트를 사용한다.
+
+## 1.1 예시
+```
+<link rel="import" href="bower_components/things-random-grid/things-random-grid.html">
+```
+
+사용 예)
+```
+  <things-random-grid 
+    id="grid"
+    hidden-columns = "customer_id,sales_order_id"
+    data-set = [[configedData]]>
+  </things-random-grid>
+```
+
+아래처럼 그리트 칼럼의 스타일을 지정해 줄수 있다.
+```javascript
+  this.$.grid.applyColumnStyle = function(key,columnConfig,record){
+              if(key == 'rownum_') {
+                columnConfig.width = 50;
+
+              } else if(key.indexOf('name')>0) {
+                columnConfig.width = 200;
+
+              } else if(key == 'id') {
+                columnConfig.width = 180;
+
+              } else if(key == 'name') {
+                columnConfig.width = 150;
+
+              } else if(key == 'description') {
+                columnConfig.width = 250;
+
+              }
+              return columnConfig;
+            }
+```
+
+@demo demo/index.html
+-->
+
+<dom-module id="things-random-grid">
+  <template>
+    <style>
+      :host {
+        display: block;
+        @apply(--layout-vertical);
+        @apply(--layout-flex);
+      }
+      things-resource-grid {
+        @apply(--layout-flex);
+      }
+    </style>
+
+    <!-- 테이블 컬럼 그리드 -->
+    <things-resource-grid
+      content
+      paginatable
+      id="grid"
+      config="[[gridConfig]]"
+      model="[[gridModel]]"
+      columns="[[gridColumns]]"
+      data="[[dataList]]"
+      total-count="[[dataCount]]"
+      current-page="{{page}}"
+      limit="[[_limit]]"
+      buttons="[[buttons]]"
+      fixed-column-count="1">
+    </things-resource-grid>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'things-random-grid',
+
+      behaviors: [
+        Things.GlobalBehavior,
+        Things.MsgBoxBehavior
+      ],
+
+      properties: {
+        /**
+         * 데이터칼럼중 숨겨야 하는 칼럼 리스트 
+         * Format : creator_id, created_at...
+         * *****
+         * @type {String}
+         */
+        hiddenColumns: {
+          type: String,
+          value : ''
+        },
+        /**
+         * Grid Config
+         */
+        gridConfig: {
+          type: Object,
+          value: function() {
+            return {
+              options: {
+                checkBar: {
+                  exclusive: true
+                }
+              }
+            }
+          }
+        },
+        /**
+         * Table Data List
+         */
+        dataSet:{
+          type: Array,
+        },
+
+        /**
+         * Table Data Total Count
+         */
+        dataCount: {
+          type: Number
+        },
+
+        /**
+         * Buttons
+         */
+        buttons: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+        /**
+         * Table Grid Model
+         */
+        gridModel: {
+          type: Array,
+          notify: true,
+          readOnly: true,
+          value: function() {
+            return [];
+          }
+        },
+
+        /**
+         * Table Grid Columns
+         */
+        gridColumns: {
+          type: Array,
+          notify: true,
+          readOnly: true,
+          value: function() {
+            return [];
+          }
+        },
+        applyColumnStyle: {
+          type: Object,
+          value : function(){
+            return function(key,colInfo,record){
+              if(key == 'rownum_') {
+                colInfo.width = 50;
+
+              } else if(key.indexOf('name')>0) {
+                colInfo.width = 200;
+
+              } else if(key == 'id') {
+                colInfo.width = 180;
+
+              } else if(key == 'name') {
+                colInfo.width = 150;
+
+              } else if(key == 'description') {
+                colInfo.width = 250;
+
+              } else if(key == 'domain_id') {
+                colInfo.width = 60;
+                colInfo.styles = {textAlignment: 'center'};
+
+              } else if(key == 'version') {
+                colInfo.width = 55;
+                colInfo.styles = {textAlignment: 'center'};
+
+              } else if(key == 'updater_id') {
+                colInfo.width = 90;
+
+              } else if(key == 'creator_id') {
+                colInfo.width = 90;
+
+              } else if(key == 'created_at') {
+                colInfo.width = 160;
+                colInfo.styles = {textAlignment: 'center'};
+
+              } else if(key == 'updated_at') {
+                colInfo.width = 160;
+                colInfo.styles = {textAlignment: 'center'};
+
+              } else if(key.indexOf('_flag') > 0 ||
+                    key.indexOf('_able') > 0 ||
+                    key.indexOf('qty') >=0) {
+                colInfo.width = 70;
+                colInfo.styles = {textAlignment: 'center'};
+
+              } else if(key.indexOf('_id') > 0 ||
+                        key.indexOf('value') >= 0 ||
+                        key.indexOf('path') >= 0 ||
+                        key.indexOf('url') >= 0 ||
+                        key.indexOf('logic') >= 0) {
+                colInfo.width = 275;
+              }
+              return colInfo;
+            }
+          }
+        },
+        /**
+         * 페이지 당 레코드 수
+         */
+        _limit: {
+          type: Number,
+          value: 50
+        }
+      },
+
+      observers: [
+        '_gridMetaChange(gridModel, gridColumns)',
+        '_onDataSetChange(dataSet)'
+      ],
+      /**
+       * 테이블 그리드를 갱신한다.
+       *********
+       * @param {Object} grid
+       */
+      refreshGrid: function(grid) {
+        grid._setGridModel(this.gridModel);
+        grid._setGridColumns(this.gridColumns);
+        grid.initializeGrid();
+      },
+      /**
+       * 그리드 데이터를 가공하여 그리드에 표시한다.
+       *********
+       * @param {Object} result
+       */
+      setGridData: function(dataList) {
+        this.set('dataList',dataList);
+      },
+
+      /**
+       * 쿼리 조회 데이터로 부터 그리드의 메타 데이터와 그리드 데이터를 가공하여 그리드에 표시한다.
+       *********
+       * @param {Object} result
+       */
+      showResult: function(result) {
+        var dataCount = result.length;
+
+        this._configureGridModel(result[0]);
+        this._configureGridColumn(result[0]);
+
+        if(dataCount > 0) {
+          this.dataCount = dataCount;
+          this.dataList = result;
+        } else {
+          this.dataCount = 0;
+          this.dataList = [{ '_type_' : 'select', '_message_' : Things.DataGlobal.t('text.emptyDataMessage') }];
+        }
+      },
+
+      /**
+       * 쿼리 실행 결과로 부터 그리드의 메타 데이터와 그리드 데이터를 가공하여 그리드에 표시한다.
+       *********
+       * @param {Object} result
+       */
+      showNoDataResult: function(result) {
+        this._configureGridModel(null);
+        this._configureGridColumn(null);
+        this.dataCount = 1;
+        this.dataList = result;
+      },
+      /**
+       * data-set이 변화 될때 데이터를 사용하여 화면을 그린다.
+       *********
+       * @param  {[type]} dataSet data list
+       * @return {[type]}         null
+       */
+      _onDataSetChange: function(dataSet){
+        if(dataSet.length >= 0) {
+          this.showResult(dataSet);
+        } else {
+          this.showNoDataResult(dataSet);
+        }
+      },
+      /**
+       * 테이블 컬럼 변경시 gridModel, gridColumns들을 변경
+       *********
+       * @param {Array} gridModel
+       * @param {Array} gridColumns
+       */
+      _gridMetaChange: function(gridModel, gridColumns) {
+        // 그리드 모델, 컬럼 등 설정 후 데이터 리프레쉬
+        var grid = this.$.grid;
+        if(grid.getGridObject() != null) {
+          this.refreshGrid(grid);
+        }
+      },
+
+      /**
+       * 쿼리 조회 데이터로 부터 gridModel을 구성
+       *********
+       * @param {Object} record
+       */
+      _configureGridModel: function(record) {
+        var gridModel = [];
+
+        if(record) {
+          for(var key in record) {
+            gridModel.push({fieldName : key});
+          }
+        } else {
+          gridModel.push({fieldName : '_type_'});
+          gridModel.push({fieldName : '_message_'});
+        }
+
+        this._setGridModel(gridModel);
+      },
+
+      /**
+       * 쿼리 조회 결과로 부터 gridColumns를 구성
+       *********
+       * @param {Object} record
+       */
+      _configureGridColumn: function(record) {
+        if(record) {
+          this._configureGridColumnsByRecord(record);
+        } else {
+          this._configureBasicGridColumns();
+        }
+      },
+
+      /**
+       * 쿼리 결과가 없는 경우 기본 그리드 컬럼을 구성
+       *********
+       * @param {Object} record
+       */
+      _configureBasicGridColumns: function() {
+        var gridColumns = [ {
+          fieldName: '_type_',
+          width: 100,
+          editable : false,
+          header : {
+            text : Things.DataGlobal.t('label.type')
+          }
+        }, {
+          fieldName: '_message_',
+          width: 600,
+          editable : true,
+          header : {
+            text : Things.DataGlobal.t('label.message')
+          }
+        } ];
+        this._setGridColumns(gridColumns);
+      },
+
+      /**
+       * 쿼리 조회 데이터로 부터 gridColumns를 구성
+       *********
+       * @param {Object} record
+       */
+      _configureGridColumnsByRecord: function(record) {
+        var gridColumns = [];
+        var hiddenColumns = this.hiddenColumns.split(',');
+        for(var key in record) {
+          var colInfo = {
+            fieldName: key,
+            name: key,
+            width: 115,
+            editable: false,
+            header: {
+              text: Things.DataGlobal.t('label.'+key)
+            }
+          };
+          
+          colInfo = this.applyColumnStyle(key,colInfo,record);
+
+          if(hiddenColumns.includes(key)){
+            colInfo.width=0;
+          }
+          gridColumns.push(colInfo);
+        }
+
+        this._setGridColumns(gridColumns);
+        this.fire('things-base-random-grid-configured',this.getGridObject());
+      },
+      /**
+       * things-resource-grid를 리턴한다.
+       * ********
+       */
+      getGrid: function() {
+        return this.$.grid;
+      },
+
+      /**
+       * Grid Object (Dataludi)를 리턴한다.
+       * *******
+       */
+      getGridObject: function() {
+        return this.getGrid().getGridObject();
+      },
+
+    })
+  </script>
+</dom-module>

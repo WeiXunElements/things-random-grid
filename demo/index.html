@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <title>things-random-grid demo</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../crypto-js/crypto-js.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" src="things-license.js"></script>
+  <script type="text/javascript" src="../../things-license-checker-min/things-license-checker.min.js"></script>
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../things-random-grid.html">
+  <style is="custom-style" include="demo-pages-shared-styles">
+    .size {
+      width: 400px;
+      height: 400px;
+      @apply(--layout-vertical);
+    }
+    things-random-grid {
+      @apply(--layout-flex);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="vertical-section-container centered">
+    <h3>Basic things-random-grid demo</h3>
+    <demo-snippet>
+      <template>
+        <div class="size">
+          <things-random-grid id="grid" hidden-columns="customer_id,sales_order_id" data-set=[[configedData]]>
+          </things-random-grid>
+        </div>
+      </template>
+      <script type="text/javascript">
+      var grid = document.querySelector('#grid');
+      grid.applyColumnStyle = function(key, columnConfig, record) {
+        if (key == 'rownum_') {
+          columnConfig.width = 50;
+
+        } else if (key.indexOf('name') > 0) {
+          columnConfig.width = 200;
+
+        } else if (key == 'id') {
+          columnConfig.width = 180;
+
+        } else if (key == 'name') {
+          columnConfig.width = 150;
+
+        } else if (key == 'description') {
+          columnConfig.width = 250;
+
+        }
+        return columnConfig;
+      };
+      grid.dataSet = [{
+        "customer_id": "E0000001",
+        "sales_order_id": "E0000001",
+        "customer": "Company1",
+        "serial_no": "E1010101",
+        "lot_type": "InvLot"
+      }, {
+        "customer_id": "E0000002",
+        "sales_order_id": "E0000002",
+        "customer": "Company2",
+        "serial_no": "E1010102",
+        "lot_type": "InvLot"
+      }]
+      </script>
+    </demo-snippet>
+  </div>
+</body>
+
+</html>
