@@ -1,8 +1,8 @@
 {
   "name": "things-random-grid",
-  "version": "v2.0.0",
+  "version": "v2.0.1",
   "authors": [
-    "Hatio Lab. <heartyoh@hatiolab.com>"
+    "Shenzhen Weixun"
   ],
   "description": "데이터에 따라 자동 구성되는 그리드",
   "keywords": [
@@ -13,8 +13,6 @@
   "main": [
     "things-random-grid.html"
   ],
-  "license": "http://license.hatiolab.com/EULA",
-  "homepage": "http://elements.hatiolab.com/",
   "ignore": [
     "/.*",
     "/test/"

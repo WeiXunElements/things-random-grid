@@ -1,11 +1,11 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../things-grid/things-resource-grid.html">
-<link rel="import" href="../things-global-behavior/things-global-behavior.html">
-<link rel="import" href="../things-msg-box-behavior/things-msg-box-behavior.html">
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../things-grid/things-resource-grid.html" />
+<link rel="import" href="../things-global-behavior/things-global-behavior.html" />
+<link rel="import" href="../things-msg-box-behavior/things-msg-box-behavior.html" />
 <!--
 # `<things-random-grid>`
 ## 1. 개요
@@ -56,11 +56,11 @@ Copyright © HatioLab Inc. All rights reserved.
     <style>
       :host {
         display: block;
-        @apply(--layout-vertical);
-        @apply(--layout-flex);
+        @apply (--layout-vertical);
+        @apply (--layout-flex);
       }
       things-resource-grid {
-        @apply(--layout-flex);
+        @apply (--layout-flex);
       }
     </style>
 
@@ -77,7 +77,8 @@ Copyright © HatioLab Inc. All rights reserved.
       current-page="{{page}}"
       limit="[[_limit]]"
       buttons="[[buttons]]"
-      fixed-column-count="1">
+      fixed-column-count="1"
+    >
     </things-resource-grid>
   </template>
 
@@ -85,41 +86,38 @@ Copyright © HatioLab Inc. All rights reserved.
     Polymer({
       is: 'things-random-grid',
 
-      behaviors: [
-        Things.GlobalBehavior,
-        Things.MsgBoxBehavior
-      ],
+      behaviors: [Things.GlobalBehavior, Things.MsgBoxBehavior],
 
       properties: {
         /**
-         * 데이터칼럼중 숨겨야 하는 칼럼 리스트 
+         * 데이터칼럼중 숨겨야 하는 칼럼 리스트
          * Format : creator_id, created_at...
          * *****
          * @type {String}
          */
         hiddenColumns: {
           type: String,
-          value : ''
+          value: '',
         },
         /**
          * Grid Config
          */
         gridConfig: {
           type: Object,
-          value: function() {
+          value: function () {
             return {
               options: {
                 checkBar: {
-                  exclusive: true
-                }
-              }
-            }
-          }
+                  exclusive: true,
+                },
+              },
+            };
+          },
         },
         /**
          * Table Data List
          */
-        dataSet:{
+        dataSet: {
           type: Array,
         },
 
@@ -127,7 +125,7 @@ Copyright © HatioLab Inc. All rights reserved.
          * Table Data Total Count
          */
         dataCount: {
-          type: Number
+          type: Number,
         },
 
         /**
@@ -135,9 +133,9 @@ Copyright © HatioLab Inc. All rights reserved.
          */
         buttons: {
           type: Array,
-          value: function() {
+          value: function () {
             return [];
-          }
+          },
         },
         /**
          * Table Grid Model
@@ -146,9 +144,9 @@ Copyright © HatioLab Inc. All rights reserved.
           type: Array,
           notify: true,
           readOnly: true,
-          value: function() {
+          value: function () {
             return [];
-          }
+          },
         },
 
         /**
@@ -158,87 +156,72 @@ Copyright © HatioLab Inc. All rights reserved.
           type: Array,
           notify: true,
           readOnly: true,
-          value: function() {
+          value: function () {
             return [];
-          }
+          },
         },
         applyColumnStyle: {
           type: Object,
-          value : function(){
-            return function(key,colInfo,record){
-              if(key == 'rownum_') {
+          value: function () {
+            return function (key, colInfo, record) {
+              if (key == 'rownum_') {
                 colInfo.width = 50;
-
-              } else if(key.indexOf('name')>0) {
+              } else if (key.indexOf('name') > 0) {
                 colInfo.width = 200;
-
-              } else if(key == 'id') {
+              } else if (key == 'id') {
                 colInfo.width = 180;
-
-              } else if(key == 'name') {
+              } else if (key == 'name') {
                 colInfo.width = 150;
-
-              } else if(key == 'description') {
+              } else if (key == 'description') {
                 colInfo.width = 250;
-
-              } else if(key == 'domain_id') {
+              } else if (key == 'domain_id') {
                 colInfo.width = 60;
-                colInfo.styles = {textAlignment: 'center'};
-
-              } else if(key == 'version') {
+                colInfo.styles = { textAlignment: 'center' };
+              } else if (key == 'version') {
                 colInfo.width = 55;
-                colInfo.styles = {textAlignment: 'center'};
-
-              } else if(key == 'updater_id') {
+                colInfo.styles = { textAlignment: 'center' };
+              } else if (key == 'updater_id') {
                 colInfo.width = 90;
-
-              } else if(key == 'creator_id') {
+              } else if (key == 'creator_id') {
                 colInfo.width = 90;
-
-              } else if(key == 'created_at') {
+              } else if (key == 'created_at') {
                 colInfo.width = 160;
-                colInfo.styles = {textAlignment: 'center'};
-
-              } else if(key == 'updated_at') {
+                colInfo.styles = { textAlignment: 'center' };
+              } else if (key == 'updated_at') {
                 colInfo.width = 160;
-                colInfo.styles = {textAlignment: 'center'};
-
-              } else if(key.indexOf('_flag') > 0 ||
-                    key.indexOf('_able') > 0 ||
-                    key.indexOf('qty') >=0) {
+                colInfo.styles = { textAlignment: 'center' };
+              } else if (key.indexOf('_flag') > 0 || key.indexOf('_able') > 0 || key.indexOf('qty') >= 0) {
                 colInfo.width = 70;
-                colInfo.styles = {textAlignment: 'center'};
-
-              } else if(key.indexOf('_id') > 0 ||
-                        key.indexOf('value') >= 0 ||
-                        key.indexOf('path') >= 0 ||
-                        key.indexOf('url') >= 0 ||
-                        key.indexOf('logic') >= 0) {
+                colInfo.styles = { textAlignment: 'center' };
+              } else if (
+                key.indexOf('_id') > 0 ||
+                key.indexOf('value') >= 0 ||
+                key.indexOf('path') >= 0 ||
+                key.indexOf('url') >= 0 ||
+                key.indexOf('logic') >= 0
+              ) {
                 colInfo.width = 275;
               }
               return colInfo;
-            }
-          }
+            };
+          },
         },
         /**
          * 페이지 당 레코드 수
          */
         _limit: {
           type: Number,
-          value: 50
-        }
+          value: 50,
+        },
       },
 
-      observers: [
-        '_gridMetaChange(gridModel, gridColumns)',
-        '_onDataSetChange(dataSet)'
-      ],
+      observers: ['_gridMetaChange(gridModel, gridColumns)', '_onDataSetChange(dataSet)'],
       /**
        * 테이블 그리드를 갱신한다.
        *********
        * @param {Object} grid
        */
-      refreshGrid: function(grid) {
+      refreshGrid: function (grid) {
         grid._setGridModel(this.gridModel);
         grid._setGridColumns(this.gridColumns);
         grid.initializeGrid();
@@ -248,8 +231,8 @@ Copyright © HatioLab Inc. All rights reserved.
        *********
        * @param {Object} result
        */
-      setGridData: function(dataList) {
-        this.set('dataList',dataList);
+      setGridData: function (dataList) {
+        this.set('dataList', dataList);
       },
 
       /**
@@ -257,18 +240,18 @@ Copyright © HatioLab Inc. All rights reserved.
        *********
        * @param {Object} result
        */
-      showResult: function(result) {
+      showResult: function (result) {
         var dataCount = result.length;
 
         this._configureGridModel(result[0]);
         this._configureGridColumn(result[0]);
 
-        if(dataCount > 0) {
+        if (dataCount > 0) {
           this.dataCount = dataCount;
           this.dataList = result;
         } else {
           this.dataCount = 0;
-          this.dataList = [{ '_type_' : 'select', '_message_' : Things.DataGlobal.t('text.emptyDataMessage') }];
+          this.dataList = [{ _type_: 'select', _message_: Things.DataGlobal.t('text.emptyDataMessage') }];
         }
       },
 
@@ -277,7 +260,7 @@ Copyright © HatioLab Inc. All rights reserved.
        *********
        * @param {Object} result
        */
-      showNoDataResult: function(result) {
+      showNoDataResult: function (result) {
         this._configureGridModel(null);
         this._configureGridColumn(null);
         this.dataCount = 1;
@@ -289,8 +272,8 @@ Copyright © HatioLab Inc. All rights reserved.
        * @param  {[type]} dataSet data list
        * @return {[type]}         null
        */
-      _onDataSetChange: function(dataSet){
-        if(dataSet.length >= 0) {
+      _onDataSetChange: function (dataSet) {
+        if (dataSet.length >= 0) {
           this.showResult(dataSet);
         } else {
           this.showNoDataResult(dataSet);
@@ -302,10 +285,10 @@ Copyright © HatioLab Inc. All rights reserved.
        * @param {Array} gridModel
        * @param {Array} gridColumns
        */
-      _gridMetaChange: function(gridModel, gridColumns) {
+      _gridMetaChange: function (gridModel, gridColumns) {
         // 그리드 모델, 컬럼 등 설정 후 데이터 리프레쉬
         var grid = this.$.grid;
-        if(grid.getGridObject() != null) {
+        if (grid.getGridObject() != null) {
           this.refreshGrid(grid);
         }
       },
@@ -315,16 +298,16 @@ Copyright © HatioLab Inc. All rights reserved.
        *********
        * @param {Object} record
        */
-      _configureGridModel: function(record) {
+      _configureGridModel: function (record) {
         var gridModel = [];
 
-        if(record) {
-          for(var key in record) {
-            gridModel.push({fieldName : key});
+        if (record) {
+          for (var key in record) {
+            gridModel.push({ fieldName: key });
           }
         } else {
-          gridModel.push({fieldName : '_type_'});
-          gridModel.push({fieldName : '_message_'});
+          gridModel.push({ fieldName: '_type_' });
+          gridModel.push({ fieldName: '_message_' });
         }
 
         this._setGridModel(gridModel);
@@ -335,8 +318,8 @@ Copyright © HatioLab Inc. All rights reserved.
        *********
        * @param {Object} record
        */
-      _configureGridColumn: function(record) {
-        if(record) {
+      _configureGridColumn: function (record) {
+        if (record) {
           this._configureGridColumnsByRecord(record);
         } else {
           this._configureBasicGridColumns();
@@ -348,22 +331,25 @@ Copyright © HatioLab Inc. All rights reserved.
        *********
        * @param {Object} record
        */
-      _configureBasicGridColumns: function() {
-        var gridColumns = [ {
-          fieldName: '_type_',
-          width: 100,
-          editable : false,
-          header : {
-            text : Things.DataGlobal.t('label.type')
-          }
-        }, {
-          fieldName: '_message_',
-          width: 600,
-          editable : true,
-          header : {
-            text : Things.DataGlobal.t('label.message')
-          }
-        } ];
+      _configureBasicGridColumns: function () {
+        var gridColumns = [
+          {
+            fieldName: '_type_',
+            width: 100,
+            editable: false,
+            header: {
+              text: Things.DataGlobal.t('label.type'),
+            },
+          },
+          {
+            fieldName: '_message_',
+            width: 600,
+            editable: true,
+            header: {
+              text: Things.DataGlobal.t('label.message'),
+            },
+          },
+        ];
         this._setGridColumns(gridColumns);
       },
 
@@ -372,36 +358,36 @@ Copyright © HatioLab Inc. All rights reserved.
        *********
        * @param {Object} record
        */
-      _configureGridColumnsByRecord: function(record) {
+      _configureGridColumnsByRecord: function (record) {
         var gridColumns = [];
         var hiddenColumns = this.hiddenColumns.split(',');
-        for(var key in record) {
+        for (var key in record) {
           var colInfo = {
             fieldName: key,
             name: key,
             width: 115,
             editable: false,
             header: {
-              text: Things.DataGlobal.t('label.'+key)
-            }
+              text: Things.DataGlobal.t('label.' + key),
+            },
           };
-          
-          colInfo = this.applyColumnStyle(key,colInfo,record);
 
-          if(hiddenColumns.includes(key)){
-            colInfo.width=0;
+          colInfo = this.applyColumnStyle(key, colInfo, record);
+
+          if (hiddenColumns.includes(key)) {
+            colInfo.width = 0;
           }
           gridColumns.push(colInfo);
         }
 
         this._setGridColumns(gridColumns);
-        this.fire('things-base-random-grid-configured',this.getGridObject());
+        this.fire('things-base-random-grid-configured', this.getGridObject());
       },
       /**
        * things-resource-grid를 리턴한다.
        * ********
        */
-      getGrid: function() {
+      getGrid: function () {
         return this.$.grid;
       },
 
@@ -409,10 +395,9 @@ Copyright © HatioLab Inc. All rights reserved.
        * Grid Object (Dataludi)를 리턴한다.
        * *******
        */
-      getGridObject: function() {
+      getGridObject: function () {
         return this.getGrid().getGridObject();
       },
-
-    })
+    });
   </script>
 </dom-module>
