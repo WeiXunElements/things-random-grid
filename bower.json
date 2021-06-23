@@ -1,6 +1,6 @@
 {
   "name": "things-random-grid",
-  "version": "v2.0.1",
+  "version": "v2.0.2",
   "authors": [
     "Shenzhen Weixun"
   ],
@@ -19,16 +19,16 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
-    "things-grid": "ThingsElements/things-grid#^2.2.0",
-    "things-global-behavior": "ThingsElements/things-global-behavior#^2.2.0",
-    "things-msg-box-behavior": "ThingsElements/things-msg-box-behavior#^2.2.0"
+    "things-grid": "WeiXunElements/things-grid#^2.2.0",
+    "things-global-behavior": "WeiXunElements/things-global-behavior#^2.2.0",
+    "things-msg-box-behavior": "WeiXunElements/things-msg-box-behavior#^2.2.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
-    "things-license-checker-min": "ThingsElements/things-license-checker-min#^2.3.0",
+    "things-license-checker-min": "WeiXunElements/things-license-checker-min#^2.3.0",
     "crypto-js": "^3.1.9"
   }
 }
